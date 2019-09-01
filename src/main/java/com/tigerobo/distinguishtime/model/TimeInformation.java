@@ -25,4 +25,16 @@ public class TimeInformation {
      * 修饰词
      */
     private String modify;
+
+    private String hours;
+
+    public TimeInformation() {
+        this.year = "";
+        this.month = "";
+        this.day = "";
+        this.week = "";
+        this.qurater = "";
+        this.modify = "";
+        this.hours = "";
+    }
 }

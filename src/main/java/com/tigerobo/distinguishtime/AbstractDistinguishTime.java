@@ -14,8 +14,15 @@ import java.util.regex.Matcher;
  **/
 public abstract class AbstractDistinguishTime implements DistinguishTime{
 
+    public String statement;
+
     @Override
     public List<TimeRange> getStandardTime(TimeInformation timeInformation) {
+        TimeRange timeRange = new TimeRange();
+        timeRange = getYearNums(timeRange, timeInformation.getYear(), statement);
+        timeRange = getMonthNums(timeRange, timeInformation.getMonth(), statement);
+        timeRange = getDayNums(timeRange, timeInformation.getDay(), statement);
+        System.out.println(timeRange);
         return null;
     }
 
