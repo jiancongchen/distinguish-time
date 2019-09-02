@@ -1,6 +1,7 @@
 package com.tigerobo.distinguishtime;
 
 import java.util.HashMap;
+import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
@@ -25,6 +26,10 @@ public class ConstantPattern {
      */
     public static final String DATE_TIME_FORMAT_3 = "[0-9一两〇二三四五六七八九十零]{4,8}(?!(百万|亿|千|百|万|十))";
 
+    /**
+     * 表示过去的时间格式
+     */
+    public static final String HISTORY_DATE = "(近|历|过去|前)(?![0-9一两二三四五六七八九十]).{0,2}年|历史|回顾|以往|过往|最近(?![0-9一两〇二三四五六七八九十]+)|近期|以前";
 
     /**
      * 数字格式
@@ -96,6 +101,20 @@ public class ConstantPattern {
 
     public static boolean isMod(String text){
         return isMatch(text, MODIFICATION);
+    }
+
+    public static String getHistoryYear(String statement){
+        Matcher matcher = getPattern(HISTORY_DATE).matcher(statement);
+        if (matcher.find()){
+            String s = matcher.group();
+            if(s.equals("前年")){
+                return "";
+            }
+            else {
+                return matcher.group();
+            }
+        }
+        return "";
     }
 
 }

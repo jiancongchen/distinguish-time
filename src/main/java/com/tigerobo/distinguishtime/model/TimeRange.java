@@ -39,4 +39,18 @@ public class TimeRange {
         this.startDay = localDate.getDayOfMonth();
         this.endDay = localDate.getDayOfMonth();
     }
+
+    @Override
+    public String toString() {
+        return "TimeRange{" +
+                "startDate=" + startDate +
+                ", endDate=" + endDate +
+                ", startYear=" + startYear +
+                ", endYear=" + endYear +
+                ", startMonth=" + startMonth +
+                ", endMonth=" + endMonth +
+                ", startDay=" + startDay +
+                ", endDay=" + endDay +
+                '}';
+    }
 }
