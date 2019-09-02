@@ -20,7 +20,7 @@ public class DateContainsUnit extends AbstractDistinguishTime{
 
     private static Logger logger = LoggerFactory.getLogger(DateContainsUnit.class);
 
-    DateContainsUnit(String statement){
+    public DateContainsUnit(String statement){
         this.statement = statement;
     }
 
@@ -56,7 +56,7 @@ public class DateContainsUnit extends AbstractDistinguishTime{
                 }
             }
             if(findx.get(i).toUpperCase().equals("H") && i+1<findx.size() && ConstantPattern.isNumber(findx.get(i+1))){
-                timeInformation.setHours(timeInformation.getHours() +"|"+findx.get(i+1));
+                timeInformation.setHalfYear(timeInformation.getHalfYear() +"|"+findx.get(i+1));
                 markStr.put(i,findx.get(i)+findx.get(i+1));
             }
             if (ConstantPattern.isMod(findx.get(i))) {
@@ -113,18 +113,12 @@ public class DateContainsUnit extends AbstractDistinguishTime{
                 continue;
             }
             if(i+1<findx.size() && findx.get(i + 1).toUpperCase().equals("H")){
-                timeInformation.setHours(timeInformation.getHours() +"|"+findx.get(i));
+                timeInformation.setHalfYear(timeInformation.getHalfYear() +"|"+findx.get(i));
                 markStr.put(i,findx.get(i)+findx.get(i+1));
             }
 
         }
 
         return timeInformation;
-    }
-
-    public static void main(String[] args) {
-        DateContainsUnit dateContainsUnit = new DateContainsUnit("2019年8月");
-        TimeInformation timeInformation = dateContainsUnit.fomatLanguageTime();
-        dateContainsUnit.getStandardTime(timeInformation);
     }
 }

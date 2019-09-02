@@ -26,6 +26,14 @@ public class ConstantPattern {
      */
     public static final String DATE_TIME_FORMAT_3 = "[0-9一两〇二三四五六七八九十零]{4,8}(?!(百万|亿|千|百|万|十))";
 
+    public static final String DATE_TIME_FORMAT_4 = "([0-9一两〇二三四五六七八九十零]{1,4})(至|到)([0-9一两〇二三四五六七八九十零]{1,4})(日|号)";
+
+    public static final String DATE_TIME_FORMAT_5 = "(([0-9一两〇二三四五六七八九十零]{2,4})年?).?([0-9一两〇二三四五六七八九十零])(至|到).?([0-9一两〇二三四五六七八九十零])季";
+
+    public static final String DATE_TIME_FORMAT_6 = "([1-4qhHQ]{2})\\s?([0-9]{2,4})";
+
+    public static final String DATE_TIME_FORMAT_7 = "([0-9]{2,4})年?\\s?([1-4qhHQ]{2})";
+
     /**
      * 表示过去的时间格式
      */
@@ -36,8 +44,9 @@ public class ConstantPattern {
      */
     public static final String NUMBER_1 = "[0-9一两〇二三四五六七八九十百千万亿零去上前昨今近明后这本当下]+";
 
-
     public static final String NUMBER_2 = "[0-9零一二三四五六七八九十]";
+
+    public static final String NUMBER_3 = "[0-9零一二三四五六七八九十]+";
 
     /**
      * 表示时间前后的语义
@@ -53,6 +62,13 @@ public class ConstantPattern {
      * 用于月份的特殊表达
      */
     public static final String MODIFICATION = "(上旬|中旬|下旬|底|初|末|中)";
+
+    /**
+     * 半年的表达方式
+     */
+    public static final String HALF_YEAR = "上半年|下半年";
+
+    public static final String QUARTER = "[qQHh]";
 
     /**
      * 存放编译后的正则表达式
@@ -103,18 +119,19 @@ public class ConstantPattern {
         return isMatch(text, MODIFICATION);
     }
 
+
     public static String getHistoryYear(String statement){
         Matcher matcher = getPattern(HISTORY_DATE).matcher(statement);
         if (matcher.find()){
             String s = matcher.group();
-            if(s.equals("前年")){
-                return "";
-            }
-            else {
-                return matcher.group();
-            }
+            return "前年".equals(s) ? "" : matcher.group();
         }
         return "";
+    }
+
+    public static String getHC(String query){
+        Matcher matcher = getPattern(HALF_YEAR).matcher(query);
+        return matcher.find() ? matcher.group() : "";
     }
 
 }

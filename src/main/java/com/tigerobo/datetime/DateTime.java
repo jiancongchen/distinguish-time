@@ -1494,12 +1494,4 @@ public class DateTime {
 
     }
 
-    public static void main(String[] args) {
-        DateTime dateTime = new DateTime();
-        System.out.print(dateTime.getDateTime("2019年8月"));
-//        List<MarketDate> marketDates = dateTime.getHardTime("2018到2019");
-//        for(MarketDate marketDate : marketDates){
-//            System.out.print(marketDate);
-//        }
-    }
 }

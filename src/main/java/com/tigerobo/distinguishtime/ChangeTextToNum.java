@@ -14,6 +14,8 @@ public class ChangeTextToNum {
     public static Map<String,Integer> char2num = new HashMap<>();
     public static Map<String,Integer> CN_NUM = new HashMap<>();
     public static Map<String,Integer> CN_UNIT = new HashMap<>();
+    public static Map<String,Integer[]> HC = new HashMap<>();
+    public static Map<String,Integer[]> RANG_NUM = new HashMap<>();
     private static final String TEN = "十";
 
     /**
@@ -94,30 +96,28 @@ public class ChangeTextToNum {
         // 处理10-19的数字
         if(unit ==10){
             tt.addFirst(10);
-
         }
-        Integer tmp = 0;
-        Integer ret = 0;
+        int tmp = 0;
+        int ret = 0;
         while(tt.size()>0){
             Object x = tt.pop();
-            if (x.toString().equals("w")){
-                tmp *= 10000;
-                ret +=tmp;
-                tmp = 0;
+            if(x != null){
+                if ("w".equals(x.toString())){
+                    tmp *= 10000;
+                    ret +=tmp;
+                    tmp = 0;
 
-            }
-            else if(x.toString().equals("y")){
-                tmp *= 100000000;
-                ret +=tmp;
-                tmp = 0;
-            }
-            else{
-                tmp += (int)x;
+                }else if("y".equals(x.toString())){
+                    tmp *= 100000000;
+                    ret +=tmp;
+                    tmp = 0;
+                }else{
+                    tmp += (int)x;
+                }
             }
         }
         ret +=tmp;
         return ret;
-
     }
 
 
@@ -184,5 +184,19 @@ public class ChangeTextToNum {
         CN_UNIT.put("萬",10000);
         CN_UNIT.put("亿",100000000);
         CN_UNIT.put("億",100000000);
+
+        HC.put("上半年", new Integer[]{101, 630});
+        HC.put("下半年", new Integer[]{701, 1231});
+
+        RANG_NUM.put("上旬",new Integer[]{1,10});
+        RANG_NUM.put("中旬",new Integer[]{11,20});
+        RANG_NUM.put("下旬",new Integer[]{21,31});
+        RANG_NUM.put("年底",new Integer[]{1221,1231});
+        RANG_NUM.put("年末",new Integer[]{1221,1231});
+        RANG_NUM.put("月底",new Integer[]{31,31});
+        RANG_NUM.put("年初",new Integer[]{101,110});
+        RANG_NUM.put("月初",new Integer[]{1,1});
+        RANG_NUM.put("月末",new Integer[]{31,31});
+        RANG_NUM.put("月中",new Integer[]{15,15});
     }
 }
