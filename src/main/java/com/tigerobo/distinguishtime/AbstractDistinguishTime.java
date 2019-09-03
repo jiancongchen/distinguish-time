@@ -8,8 +8,6 @@ import org.apache.commons.lang3.StringUtils;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.LinkedList;
-import java.util.List;
 import java.util.regex.Matcher;
 
 /**
@@ -23,7 +21,7 @@ public abstract class AbstractDistinguishTime implements DistinguishTime{
     public static final int YEAR_1900 = 1900;
 
     @Override
-    public List<TimeRange> getStandardTime(TimeInformation timeInformation) {
+    public TimeRange getStandardTime(TimeInformation timeInformation) {
         TimeRange timeRange = new TimeRange();
         timeRange = getYearNums(timeRange, timeInformation.getYear(), statement);
         timeRange = getMonthNums(timeRange, timeInformation.getMonth(), statement);
@@ -35,9 +33,7 @@ public abstract class AbstractDistinguishTime implements DistinguishTime{
         timeRange = autoComplete(timeRange);
         timeRange = TimeRange.getFormatDate(timeRange);
         timeRange = getWeekNums(timeRange, timeInformation.getWeek(), statement);
-        LinkedList<TimeRange> timeRanges = new LinkedList<>();
-        timeRanges.add(timeRange);
-        return timeRanges;
+        return timeRange;
     }
 
     /**
@@ -58,15 +54,15 @@ public abstract class AbstractDistinguishTime implements DistinguishTime{
                 if (ConstantPattern.getPattern(ConstantPattern.NN).matcher(yearS[i]).lookingAt()) {
                     if (yearS[i].length() > 1) {
                         if (yearS[i].substring(0, 1).equals("近") || yearS[i].substring(0, 1).equals("去")||yearS[i].substring(0, 1).equals("前")) {
-                            if (ChangeTextToNum.str2int(yearS[i].substring(1, yearS[i].length()))>0.001) {
-                                yearNum = yearNum - 1 * ChangeTextToNum.str2int(yearS[i].substring(1, yearS[i].length()));
+                            if (ChangeTextToNum.str2int(yearS[i].substring(1))>0.001) {
+                                yearNum = yearNum - 1 * ChangeTextToNum.str2int(yearS[i].substring(1));
                                 timeRange.setStartYear(yearNum);
                             }
                         } else {
                             // 需要考虑时间是否是未来的，或者过去的
-                            Integer a = 0;
-                            a = ChangeTextToNum.str2int(yearS[0].substring(0,1))>0?1:ChangeTextToNum.str2int(yearS[0].substring(0,1))<0?-1:0;
-                            yearNum = yearNum + a * ChangeTextToNum.str2int(yearS[i].substring(1, yearS[i].length()));
+                            int a ;
+                            a = Integer.compare(ChangeTextToNum.str2int(yearS[0].substring(0, 1)), 0);
+                            yearNum = yearNum + a * ChangeTextToNum.str2int(yearS[i].substring(1));
                             if (a>0) {
 
                                 timeRange.setStartYear(LocalDate.now().getYear() + a);
@@ -106,8 +102,7 @@ public abstract class AbstractDistinguishTime implements DistinguishTime{
                                 timeRange.setStartYear(ChangeTextToNum.str2int(m.group()));
                                 timeRange.setEndYear(ChangeTextToNum.str2int(m.group()));
                             }
-                        }
-                        else {
+                        }else {
                             timeRange.setStartYear(yearNum);
                             timeRange.setEndYear(yearNum);
                         }
@@ -140,12 +135,12 @@ public abstract class AbstractDistinguishTime implements DistinguishTime{
             if (ConstantPattern.getPattern(ConstantPattern.NN).matcher(monthS[i]).lookingAt()) {
                 if (monthS[i].length() > 1) {
                     if (monthS[i].substring(0, 1).equals("近")|| monthS[i].substring(0, 1).equals("去")||monthS[i].substring(0, 1).equals("前")) {
-                        monthNum = monthNum - 1 * ChangeTextToNum.str2int(monthS[i].substring(1, monthS[i].length()));
+                        monthNum = monthNum - 1 * ChangeTextToNum.str2int(monthS[i].substring(1));
                         timeRange.setStartMonth(monthNum);
                     } else {
                         Integer a = 0;
                         a = ChangeTextToNum.str2int(monthS[0].substring(0,1))>0?1:ChangeTextToNum.str2int(monthS[0].substring(0,1))<0?-1:0;
-                        monthNum = monthNum + a * ChangeTextToNum.str2int(monthS[i].substring(1, monthS[i].length()));
+                        monthNum = monthNum + a * ChangeTextToNum.str2int(monthS[i].substring(1));
                         if (a>0){
                             timeRange.setStartMonth(LocalDate.now().getMonthValue()+a);
                             timeRange.setEndMonth(monthNum);
@@ -202,12 +197,12 @@ public abstract class AbstractDistinguishTime implements DistinguishTime{
             if (ConstantPattern.getPattern(ConstantPattern.NN).matcher(dayS[i]).lookingAt()) {
                 if (dayS[i].length() > 1) {
                     if (dayS[i].substring(0, 1).equals("近")||dayS[i].substring(0, 1).equals("去")||dayS[i].substring(0, 1).equals("前")) {
-                        dayNum = dayNum - 1 * ChangeTextToNum.str2int(dayS[i].substring(1, dayS[i].length())) + 1;
+                        dayNum = dayNum - 1 * ChangeTextToNum.str2int(dayS[i].substring(1)) + 1;
                         timeRange.setStartDay(dayNum);
                     } else {
                         int a = 0;
                         a = ChangeTextToNum.str2int(dayS[0].substring(0,1))>0?1:ChangeTextToNum.str2int(dayS[0].substring(0,1))<0?-1:0;
-                        dayNum = dayNum + a* ChangeTextToNum.str2int(dayS[i].substring(1, dayS[i].length()));
+                        dayNum = dayNum + a* ChangeTextToNum.str2int(dayS[i].substring(1));
                         if (a>0) {
                             timeRange.setStartDay(LocalDate.now().getDayOfMonth()+a);
                             timeRange.setEndDay(dayNum);
@@ -259,7 +254,7 @@ public abstract class AbstractDistinguishTime implements DistinguishTime{
                 if (ConstantPattern.getPattern(ConstantPattern.NN).matcher(weekS[i]).lookingAt()) {
                     if (weekS[i].length() > 1) {
                         if (weekS[i].substring(0, 1).equals("近") || weekS[i].substring(0, 1).equals("去")||weekS[i].substring(0, 1).equals("前")) {
-                            weekNum = 0 - 7 * ChangeTextToNum.str2int(weekS[i].substring(1, weekS[i].length())) + 1;
+                            weekNum = 0 - 7 * ChangeTextToNum.str2int(weekS[i].substring(1)) + 1;
                             weekNums.add(weekNum);
                             weekNums.add(0);
                         } else {
@@ -267,16 +262,16 @@ public abstract class AbstractDistinguishTime implements DistinguishTime{
                             Integer a = 0;
                             a = ChangeTextToNum.str2int(weekS[0].substring(0,1))>0?1:ChangeTextToNum.str2int(weekS[0].substring(0,1))<0?-1:0;
                             if(a>0) {
-                                weekNum = 1 - weekNum + 7*a*(ChangeTextToNum.str2int(weekS[i].substring(1, weekS[i].length()))+1);
+                                weekNum = 1 - weekNum + 7*a*(ChangeTextToNum.str2int(weekS[i].substring(1))+1);
                                 weekNums.add(1-LocalDate.now().getDayOfWeek().getValue()+ a*7);
                                 weekNums.add(weekNum-1);
                             }else if (a<0){
-                                weekNum = 1 - weekNum + 7*a*ChangeTextToNum.str2int(weekS[i].substring(1, weekS[i].length()));
+                                weekNum = 1 - weekNum + 7*a*ChangeTextToNum.str2int(weekS[i].substring(1));
                                 weekNums.add(weekNum);
                                 weekNums.add(1-LocalDate.now().getDayOfWeek().getValue()-1);
                             }else{
                                 weekNums.add(1-LocalDate.now().getDayOfWeek().getValue());
-                                weekNum = 1 - weekNum + 7*ChangeTextToNum.str2int(weekS[i].substring(1, weekS[i].length()))-1;
+                                weekNum = 1 - weekNum + 7*ChangeTextToNum.str2int(weekS[i].substring(1))-1;
                                 weekNums.add(weekNum);
                             }
                         }
@@ -346,14 +341,14 @@ public abstract class AbstractDistinguishTime implements DistinguishTime{
                 if (ConstantPattern.getPattern(ConstantPattern.NN).matcher(quarterS[i]).lookingAt()) {
                     if (quarterS[i].length() > 1) {
                         if (quarterS[i].substring(0, 1).equals("近") || quarterS[i].substring(0, 1).equals("去")||quarterS[i].substring(0, 1).equals("前")) {
-                            quarterNum = quarterNumb - 3 * ChangeTextToNum.str2int(quarterS[i].substring(1, quarterS[i].length()));
+                            quarterNum = quarterNumb - 3 * ChangeTextToNum.str2int(quarterS[i].substring(1));
                             quarterNums.add(quarterNum);
                             quarterNums.add(quarterNumb);
                         }
                         else{
                             Integer a = 0;
                             a = ChangeTextToNum.str2int(quarterS[0].substring(0,1))>0?1:ChangeTextToNum.str2int(quarterS[0].substring(0,1))<0?-1:0;
-                            quarterNumb = quarterNum + a*ChangeTextToNum.str2int(quarterS[i].substring(1, quarterS[i].length()));
+                            quarterNumb = quarterNum + a*ChangeTextToNum.str2int(quarterS[i].substring(1));
                             if (a>0) {
                                 quarterNums.add(3*(quarterNum+a-1)+1);
                                 quarterNums.add(quarterNumb * 3);
@@ -529,13 +524,19 @@ public abstract class AbstractDistinguishTime implements DistinguishTime{
      * @return
      */
     public static TimeRange autoComplete(TimeRange timeRange){
-        if(!timeRange.isMonthFlag()){
+        boolean completeMonthAndDay = timeRange.getEndYear() < LocalDate.now().getYear()
+                && !timeRange.isMonthFlag() && !timeRange.isDayFlag();
+        if(completeMonthAndDay){
             timeRange.setStartMonth(1);
             timeRange.setEndMonth(12);
-        }
-        if(!timeRange.isDayFlag()){
             timeRange.setStartDay(1);
             timeRange.setEndDay(31);
+            return timeRange;
+        }
+        if(timeRange.isMonthFlag() && !timeRange.isDayFlag()){
+            timeRange.setStartDay(1);
+            timeRange.setEndDay(31);
+            return timeRange;
         }
         return timeRange;
     }

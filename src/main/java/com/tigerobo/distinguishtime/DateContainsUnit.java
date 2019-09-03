@@ -1,7 +1,6 @@
 package com.tigerobo.distinguishtime;
 
 import com.tigerobo.distinguishtime.model.TimeInformation;
-import com.tigerobo.distinguishtime.model.TimeRange;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -25,7 +24,7 @@ public class DateContainsUnit extends AbstractDistinguishTime{
     }
 
     @Override
-    public TimeInformation fomatLanguageTime() {
+    public TimeInformation formatLanguageTime() {
         Matcher matcher = ConstantPattern.getPattern(ConstantPattern.DATE_TIME_FORMAT_1).matcher(statement);
         ArrayList<String> findx = new ArrayList<>();
         ArrayList<Integer> findIndex = new ArrayList<>();
@@ -92,7 +91,6 @@ public class DateContainsUnit extends AbstractDistinguishTime{
                     markStr.put(i, findx.get(i) + findx.get(i + 1) + findx.get(i + 2));
                 }else{
                     markStr.put(i, findx.get(i) + findx.get(i + 1));
-
                 }
                 continue;
             }
@@ -101,7 +99,6 @@ public class DateContainsUnit extends AbstractDistinguishTime{
                 markStr.put(i,findx.get(i)+findx.get(i + 1));
                 continue;
             }
-
             if (i+1<findx.size() && (findx.get(i + 1).equals("周") || findx.get(i + 1).equals("星期"))) {
                 timeInformation.setWeek(timeInformation.getWeek() + "|" + findx.get(i));
                 markStr.put(i,findx.get(i)+findx.get(i + 1));
@@ -116,9 +113,7 @@ public class DateContainsUnit extends AbstractDistinguishTime{
                 timeInformation.setHalfYear(timeInformation.getHalfYear() +"|"+findx.get(i));
                 markStr.put(i,findx.get(i)+findx.get(i+1));
             }
-
         }
-
         return timeInformation;
     }
 }
