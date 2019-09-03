@@ -9,7 +9,7 @@ import com.tigerobo.distinguishtime.DistinguishTimeFactory;
 public class TestTime {
 
     public static void main(String[] args) {
-        String statement = "我想要2018年至2019年以及2020年的华北地区的螺纹钢产量";
+        String statement = "我想要2018年的近三年的华北地区的螺纹钢产量";
         DateTime dateTime = new DateTime();
         System.out.println(dateTime.getDateTime(statement));
         System.out.println();
